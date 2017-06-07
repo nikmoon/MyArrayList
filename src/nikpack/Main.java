@@ -26,20 +26,43 @@ class MyArrayList<T> {
         return newStorage;
     }
 
-    public void add(int index, T value) {
+    public void add(int index, T value) throws IndexOutOfBoundsException{
+        if (index > this.length)
+            throw new IndexOutOfBoundsException();
+
         Object[] newStorage = storage;
-        int newLength = this.length + 1;
-        if (newLength > capacity) {
+        if (this.length + 1 > capacity) {
             newStorage = getBiggerStorage();
+            this.capacity = newStorage.length;
+
+            // копируем первую половину в новый массив
+            System.arraycopy(this.storage, 0, newStorage, 0, index);
         }
-        System.arraycopy(this.storage, 0, newStorage, 0, index);
+
+        // вставляем новое значение
         newStorage[index] = value;
+
+        // копируем оставшиеся элементы
         System.arraycopy(this.storage, index, newStorage, index + 1, this.length - index);
+
+        this.length += 1;
     }
+
+
+    public boolean add(T value) {
+        this.add(this.length, value);
+        return true;
+    }
+
+
+    public T remove(int index) {
+        return null;
+    }
+
 }
 
 //1 вариант
 //реализация ArrayList
-// add(index), add(), remove(index), remove(value)
+// add(index), add(value), remove(index), remove(value)
 // contains
 // System.arraycopy
